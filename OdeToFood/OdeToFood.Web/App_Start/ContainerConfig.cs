@@ -1,22 +1,26 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using OdeToFood.Data.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace OdeToFood.Web
 {
     public static class ContainerConfig
     {
-        public static void RegisterContainer()
+        public static void RegisterContainer(HttpConfiguration  httpConfiguration)
         {
             //Using dependency injection. 
             var builder = new ContainerBuilder();
             //MvcApplication is the class in the code behind that represents this application see Global.asax.cs
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
+            //for the api 
+            builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
             //tell the continaer builder about the specific services I have 
             builder.RegisterType<InMemoryRestaurantData>().As<IRestaurantData>()
                 .SingleInstance();//other fieleds like per http request etc. 
@@ -29,6 +33,7 @@ namespace OdeToFood.Web
             //register all the controlers  build the container then set the contaiiner as teh dependency resolver
             //any where mvc uses to inject dependencies it wil use this container. 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            httpConfiguration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
     }
 }

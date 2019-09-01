@@ -29,5 +29,12 @@ namespace OdeToFood.Data.Services
             return restaurants.OrderBy(r => r.Name);//Ascending order by default. 
         }
 
+        public void Add(Restaurant restaurant)
+        {
+            restaurants.Add(restaurant);
+            //generate id for this restaurant this is only for inmemory data. 
+            restaurant.Id = restaurants.Max(r => r.Id) + 1;
+        }
+
     }
 }

@@ -44,8 +44,51 @@ namespace OdeToFood.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create (Restaurant restaurant)
         {
-            db.Add(restaurant);
+            if(String.IsNullOrEmpty(restaurant.Name))
+            {
+                ModelState.AddModelError(nameof(restaurant.Name), "The name is required");
+            }
+
+            if(ModelState.IsValid)
+            {
+                db.Add(restaurant);
+                return RedirectToAction("Details", new { id = restaurant.Id });
+            }
+
             return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Restaurant restaurant)
+        {
+            if(String.IsNullOrEmpty(restaurant.Name))
+            {
+                ModelState.AddModelError(nameof(restaurant.Name), "The name is required");
+            }
+
+            if(ModelState.IsValid)
+            {
+                db.Edit(restaurant);
+                return RedirectToAction("Details", new { id = restaurant.Id });
+            }
+
+            return View();
+        }
+        [HttpGet]
+        public ActionResult Edit (int id)
+        {
+            var model = db.Get(id);
+
+            if ( model == null)
+            {
+                return View("NotFound");
+                //also could return HttpNotFound();
+            }
+
+            return View(model);
+        }
+
+        
     }
 }

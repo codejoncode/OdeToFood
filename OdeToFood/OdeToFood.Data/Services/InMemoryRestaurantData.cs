@@ -36,5 +36,18 @@ namespace OdeToFood.Data.Services
             restaurant.Id = restaurants.Max(r => r.Id) + 1;
         }
 
+        public void Edit(Restaurant restaurant)
+        {
+            foreach(var item in restaurants)
+            {
+                if (item.Id == restaurant.Id)
+                {
+                    item.Name = restaurant.Name;
+                    item.Cuisine = restaurant.Cuisine;
+                    break;//once found stop iterations
+                }
+            }
+        }
+
     }
 }

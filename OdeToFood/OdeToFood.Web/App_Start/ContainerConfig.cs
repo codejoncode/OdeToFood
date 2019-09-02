@@ -22,8 +22,14 @@ namespace OdeToFood.Web
             //for the api 
             builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
             //tell the continaer builder about the specific services I have 
-            builder.RegisterType<InMemoryRestaurantData>().As<IRestaurantData>()
-                .SingleInstance();//other fieleds like per http request etc. 
+            builder.RegisterType<SqlRestaurantData>().As<IRestaurantData>()
+                .InstancePerRequest();//create a component and allow it to be arround for a single request for a particular user
+            //once the request is over   throw it away.  safest and easiest way to use db context 
+            //register the type of the sql data needs to be injected 
+            builder.RegisterType<OdeToFoodDbContext>().InstancePerRequest();
+
+                // don't need a singleton for database. dbContext is not a thread safe class
+                //.SingleInstance();//other fieleds like per http request etc. 
                                   //^ use this type when someone needs something that represents IRestaurantData. 
                                   //this change can be made  here if we make other changes
 

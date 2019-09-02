@@ -69,7 +69,7 @@ namespace OdeToFood.Web.Controllers
 
             if(ModelState.IsValid)
             {
-                db.Edit(restaurant);
+                db.Update(restaurant);
                 return RedirectToAction("Details", new { id = restaurant.Id });
             }
 

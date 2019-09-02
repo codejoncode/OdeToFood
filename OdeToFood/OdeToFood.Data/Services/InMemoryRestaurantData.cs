@@ -36,7 +36,7 @@ namespace OdeToFood.Data.Services
             restaurant.Id = restaurants.Max(r => r.Id) + 1;
         }
 
-        public void Edit(Restaurant restaurant)
+        public void Update(Restaurant restaurant)
         {
             foreach(var item in restaurants)
             {
